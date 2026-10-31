@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ilk 3D Kupum</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+  </style>
+</head>
+<body>
+
+<script src="three.min.js"></script>
+
+<script>
+  // 1) SAHNE: 3D dunyamiz
+  const sahne = new THREE.Scene();
+  sahne.background = new THREE.Color(0x0b1d3a);   // lacivert
+
+  // 2) KAMERA: dunyaya baktigimiz goz
+  const kamera = new THREE.PerspectiveCamera(
+    75,                                      // gorus acisi
+    window.innerWidth / window.innerHeight,  // ekran orani
+    0.1,                                     // en yakin gorunen mesafe
+    1000                                     // en uzak gorunen mesafe
+  );
+  kamera.position.z = 5;                     // kamerayi biraz geri cek
+
+  // 3) CIZICI: sahneyi ekrana ciziyor
+  const cizici = new THREE.WebGLRenderer();
+  cizici.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(cizici.domElement);
+
+  // 4) KUP: sekil + malzeme = nesne
+  const sekil = new THREE.BoxGeometry(2, 2, 2);                       // genislik, yukseklik, derinlik
+  const malzeme = new THREE.MeshNormalMaterial();                     // her yuzu farkli renk (isik gerekmez)
+  const kup = new THREE.Mesh(sekil, malzeme);
+  sahne.add(kup);                                                     // kupu sahneye koy
+
+  // 5) ANIMASYON: saniyede yaklasik 60 kez calisir
+  function ciz() {
+    requestAnimationFrame(ciz);
+    kup.rotation.x += 0.01;   // x ekseninde don
+    kup.rotation.y += 0.02;   // y ekseninde don
+    cizici.render(sahne, kamera);
+  }
+  ciz();
+</script>
+
+</body>
+</html>
